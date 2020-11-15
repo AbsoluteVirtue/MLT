@@ -167,3 +167,5 @@ fabric.properties
 
 # local files
 test.py
+/Pipfile
+/Pipfile.lock

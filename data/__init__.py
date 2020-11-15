@@ -1,7 +1,4 @@
 import json
-# import os
-#
-# entries = os.scandir("data/")
 
 
 def composers_data():

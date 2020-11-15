@@ -1,27 +1,29 @@
-import data
-import xlwt
+import aiohttp_jinja2
+import asyncio
+import jinja2
+import logging
+import os.path
+from aiohttp import web
+
+from settings import config, cfg_path, setup_app
+
+
+async def make_app():
+    loop = asyncio.get_event_loop()
+    app = web.Application(loop=loop)
+
+    setup_app(app)
+
+    aiohttp_jinja2.setup(app, loader=jinja2.FileSystemLoader(os.path.abspath('templates')))
+
+    return app
 
 
 if __name__ == '__main__':
 
-    book = xlwt.Workbook()
-    sheet = book.add_sheet("Composers")
+    logging.basicConfig(level=logging.INFO)
+    logging.info('Web server started on port %s' % config['port'])
+    logging.info('Config file: %s' % cfg_path)
 
-    sheet.write(0, 0, "file")
-    sheet.write(0, 1, "composer")
-    sheet.write(0, 2, "title")
-    sheet.write(0, 3, "genre")
-    sheet.write(0, 4, "period")
-
-    i = 1
-    for comp in data.composers_data():
-        for track in comp['tracks']:
-            sheet.row(i).write(0, track['filename'])
-            sheet.row(i).write(1, comp['name'])
-            sheet.row(i).write(2, track['title'])
-            sheet.row(i).write(3, track['genre'])
-            sheet.row(i).write(4, track['period'])
-
-            i += 1
-
-    book.save("composers.xls")
+    web.run_app(make_app(), host=config['host'], port=config['port'],
+                access_log_format='%t %P %s %r (%a) [%{Referer}i] %Tf')
