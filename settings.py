@@ -6,9 +6,6 @@ import yaml
 import logging
 from yaml import FullLoader
 
-import data
-from routes import setup_routes
-
 
 def get_cl_args():
     parser = argparse.ArgumentParser(description='Process arguments.')
@@ -50,13 +47,8 @@ async def close_session(app):
     await app['http'].close()
 
 
-def setup_app(app):
-    setup_routes(app)
-
-    app['config'] = config
-    app['media'] = media_path
-    app['logger'] = logger
+def configure_settings(app):
+    app['history'] = []
     app['http'] = aiohttp.ClientSession()
-    app['composers'] = data.composers_data()
 
     app.on_cleanup.append(close_session)

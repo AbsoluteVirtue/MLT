@@ -4,9 +4,39 @@
     <meta charset="UTF-8">
     <title>Command Interface</title>
 </head>
+
+<style>
+    html,
+    body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .form__input {
+        border: none;
+        border-bottom: 1px solid #000;
+        width: 750px;
+        height: 100px;
+        font-size: 90px;
+    }
+</style>
+
 <body>
     <form action ="/" method="post">
-        <input type="submit" name="filename" value="saltarello.mp3">
+        <input autofocus type="search"
+               name="query"
+               class="form__input"
+               placeholder=">"
+               autocomplete="off">
     </form>
 </body>
 </html>

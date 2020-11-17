@@ -1,7 +1,6 @@
 import aiohttp_jinja2
 from aiohttp import web
-
-from utils import mp3_ps as media
+from . import parse
 
 
 class Index(web.View):
@@ -15,12 +14,9 @@ class Index(web.View):
     async def post(self):
         body = await self.request.post()
 
-        filename = body['filename']
-        try:
-            media.play(filename, self.request.app['media'])
-            _s = True
-        except Exception as e:
-            self.request.app['logger'].error(e)
-            _s = False
+        query = body['query']   # TODO: input validation
+        tokens = query.split(' ')
 
-        return web.json_response({'success': _s})
+        parse(self.request.app, tokens)
+
+        raise web.HTTPFound(self.request.app.router['home'].url_for())
